@@ -104,7 +104,7 @@ struct Cost :std::vector<Residual*> {
 
     double eval(const Matrix<double>& v) {
         auto e = evalres(v);
-        return sum(e*e,REDUCE_DIRECTION::ALL)(0);
+        return 0.5*sum(e*e,REDUCE_DIRECTION::ALL)(0);
     }
 
     Matrix<double> jacobian(const Matrix<double>& v) {
@@ -281,6 +281,7 @@ struct LevenbergMarquardtMethod : Optimizer {
             next_cost = cost.eval(cost.vars()+p);
             double rho = -(cur_cost - next_cost)/
                     (matmul(grad.t(),p)+0.5*matmul(matmul(p.t(),B),p))(0);
+
             if(rho<0.25)
                 range *= 0.25;
             else if(rho>0.75 && abs(pm/range-1)<1e-2 )

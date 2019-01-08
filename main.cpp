@@ -84,9 +84,12 @@ int main() {
         start_time = clock();
         opt.minimize();
         end_time = clock();
+        cout<<"Gauss-Newton Method"<<endl;
         cout << cost.vars()(Range({0,0},{1,2})).t() << endl;
         cout<<"time used: "<<setprecision(9)<<(end_time-start_time+0.0)/CLOCKS_PER_SEC<<endl;
     }
+
+    cout<<"==============="<<endl;
 
     {
         Cost cost(32);
@@ -94,14 +97,14 @@ int main() {
             auto cr = XY.row(r);
             cost.push_back(new_residual<MyFunctor>(cost.vars(), r, cr(0),cr(1)));
             cost.push_back(new_residual<MyFunctor2>(cost.vars(),r));
-
         }
 
-        LevenbergMarquardtMethod opt(cost,1e-6,1e4,1e10,0.15);
+        LevenbergMarquardtMethod opt(cost,1e-6,1e4,1e6,0.15);
         time_t start_time, end_time;
         start_time = clock();
         opt.minimize();
         end_time = clock();
+        cout<<"Levenberg-Marquardt Method"<<endl;
         cout << cost.vars()(Range({0,0},{1,2})).t() << endl;
         cout<<"time used: "<<setprecision(9)<<(end_time-start_time+0.0)/CLOCKS_PER_SEC<<endl;
     }
